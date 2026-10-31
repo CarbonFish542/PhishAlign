@@ -73,3 +73,7 @@ PhishAlign_web/node_modules/
 PhishAlign_web/dist/
 PhishAlign_web/__pycache__/
 
+# --- Academic Report, Review & Presentation ---
+report/
+
+
