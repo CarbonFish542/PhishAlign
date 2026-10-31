@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign in to your Microsoft account - Verification Required</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .demo-banner {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .card {
+      background: #ffffff;
+      padding: 44px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      width: 360px;
+      box-sizing: border-box;
+    }
+    .ms-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .ms-squares {
+      display: grid;
+      grid-template-columns: 10px 10px;
+      grid-gap: 2px;
+    }
+    .sq { width: 10px; height: 10px; }
+    .sq-red { background: #f25022; }
+    .sq-green { background: #7fba00; }
+    .sq-blue { background: #00a4ef; }
+    .sq-yellow { background: #ffb900; }
+    .ms-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #737373;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1b1b1b;
+      margin: 0 0 16px 0;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #505050;
+      margin-bottom: 20px;
+    }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #666;
+      padding: 8px 0;
+      font-size: 15px;
+      margin-bottom: 20px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    input:focus {
+      border-bottom: 2px solid #0067b8;
+    }
+    .btn {
+      background: #0067b8;
+      color: #fff;
+      border: none;
+      padding: 8px 32px;
+      font-size: 15px;
+      cursor: pointer;
+      float: right;
+    }
+    .btn:hover {
+      background: #005da6;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    ⚠️ Simulated Phishing Testbed — Microsoft Account Impersonation
+  </div>
+
+  <div class="card">
+    <div class="ms-logo">
+      <div class="ms-squares">
+        <div class="sq sq-red"></div>
+        <div class="sq sq-green"></div>
+        <div class="sq sq-blue"></div>
+        <div class="sq sq-yellow"></div>
+      </div>
+      <span class="ms-text">Microsoft</span>
+    </div>
+
+    <h1>Sign in</h1>
+    <div class="subtitle">to access your Outlook and Office 365 services</div>
+
+    <form action="javascript:void(0);" onsubmit="event.preventDefault(); alert('PhishAlign Test: Form submission blocked (inert demo).');">
+      <input type="email" placeholder="Email, phone, or Skype" required />
+      <input type="password" placeholder="Password" required />
+      <button type="submit" class="btn">Next</button>
+    </form>
+    <div style="clear: both; margin-top: 35px; border-top: 1px solid #eee; padding-top: 15px; font-size: 13px; text-align: center;">
+      <strong>Switch Test Scenarios:</strong><br/>
+      <a href="/" style="color: #0070ba; text-decoration: none; margin-right: 12px;">PayPal Spoof</a> |
+      <a href="/google.html" style="color: #0b57d0; text-decoration: none; margin-left: 12px;">Google Spoof</a>
+    </div>
+  </div>
+</body>
+</html>

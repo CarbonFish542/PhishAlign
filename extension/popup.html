@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhishAlign</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(22, 30, 46, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --safe: #10b981;
+      --safe-bg: rgba(16, 185, 129, 0.12);
+      --safe-border: rgba(16, 185, 129, 0.35);
+      --warn: #f59e0b;
+      --warn-bg: rgba(245, 158, 11, 0.12);
+      --warn-border: rgba(245, 158, 11, 0.35);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --danger-border: rgba(239, 68, 68, 0.35);
+      --accent-blue: #3b82f6;
+    }
+
+    body {
+      width: 350px;
+      min-height: 200px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+    .brand-title span {
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-tag {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .status-pill {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+    }
+    .status-pill.legitimate { background: var(--safe-bg); color: var(--safe); border-color: var(--safe-border); }
+    .status-pill.suspicious { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .status-pill.phishing { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+    .status-pill.pending { background: rgba(148, 163, 184, 0.1); color: var(--text-muted); border-color: rgba(148, 163, 184, 0.2); }
+    .status-pill.error { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+
+    /* ── Main Container ── */
+    .content { padding: 14px 16px; }
+
+    .state { display: none; }
+    .state.active { display: block; animation: fadeIn .2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Verdict Banner ── */
+    .verdict-card {
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid var(--card-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .verdict-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .verdict-card.legitimate {
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.02));
+      border-color: var(--safe-border);
+    }
+    .verdict-card.legitimate::before { background: var(--safe); }
+
+    .verdict-card.suspicious {
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+      border-color: var(--warn-border);
+    }
+    .verdict-card.suspicious::before { background: var(--warn); }
+
+    .verdict-card.phishing {
+      background: linear-gradient(180deg, rgba(239, 68, 68, 0.09), rgba(239, 68, 68, 0.02));
+      border-color: var(--danger-border);
+    }
+    .verdict-card.phishing::before { background: var(--danger); }
+
+    .verdict-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .verdict-icon { font-size: 20px; line-height: 1; }
+    .verdict-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+    .verdict-card.legitimate .verdict-title { color: #34d399; }
+    .verdict-card.suspicious .verdict-title { color: #fbbf24; }
+    .verdict-card.phishing .verdict-title { color: #f87171; }
+
+    .verdict-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* ── Threat Tag Banner (for Spoofed Brands) ── */
+    .spoof-alert {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      font-size: 11px;
+      color: #fca5a5;
+      font-weight: 600;
+    }
+    .spoof-alert.active { display: flex; }
+
+    /* ── Risk Score Section ── */
+    .meter-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .meter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .meter-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+    .meter-score {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .meter-score.safe { color: var(--safe); }
+    .meter-score.warn { color: var(--warn); }
+    .meter-score.danger { color: var(--danger); }
+
+    /* 3-Tier Multi-Segment Meter Bar */
+    .meter-track {
+      height: 8px;
+      background: #1e293b;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
+    }
+    .meter-fill.safe { background: linear-gradient(90deg, #059669, #10b981); }
+    .meter-fill.warn { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .meter-fill.danger { background: linear-gradient(90deg, #dc2626, #ef4444); }
+
+    .meter-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* ── Modalities Grid ── */
+    .modalities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .mod-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 9px 8px;
+      text-align: center;
+    }
+    .mod-title {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .mod-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .mod-val.safe { color: #34d399; }
+    .mod-val.warn { color: #fbbf24; }
+    .mod-val.danger { color: #f87171; }
+
+    /* ── Intent Signals Pill Drawer ── */
+    .signals-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 14px;
+    }
+    .signals-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .signals-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .signal-chip {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .signal-chip.danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .signal-chip.warn {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .signal-chip.safe {
+      background: rgba(16, 185, 129, 0.12);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    /* ── Action Buttons ── */
+    .actions { display: flex; flex-direction: column; gap: 6px; }
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+    }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warn {
+      background: #f59e0b;
+      color: #000;
+      font-weight: 700;
+    }
+    .btn-warn:hover { background: #d97706; }
+    .btn-ghost {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .btn-ghost:hover { background: #334155; color: #f1f5f9; }
+
+    /* ── Pending State ── */
+    .scanning-wrap {
+      padding: 24px 10px;
+      text-align: center;
+    }
+    .pulse-radar {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 14px;
+      position: relative;
+    }
+    .radar-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid #3b82f6;
+      animation: ripple 1.6s ease-out infinite;
+    }
+    .radar-center {
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      background: #3b82f6;
+    }
+    @keyframes ripple {
+      0% { transform: scale(0.4); opacity: 1; }
+      100% { transform: scale(1.3); opacity: 0; }
+    }
+    .scan-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .scan-sub { font-size: 11px; color: var(--text-muted); }
+
+    /* ── Error State ── */
+    .error-wrap { padding: 16px 8px; text-align: center; }
+    .error-icon { font-size: 32px; margin-bottom: 8px; }
+    .error-title { font-size: 14px; font-weight: 700; color: #f87171; margin-bottom: 6px; }
+    .error-msg { font-size: 11.5px; color: #94a3b8; margin-bottom: 14px; line-height: 1.4; }
+
+    /* ── URL strip & Footer ── */
+    .url-strip {
+      font-size: 10px;
+      color: #64748b;
+      word-break: break-all;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: monospace;
+    }
+    .footer {
+      padding: 9px 16px;
+      border-top: 1px solid var(--card-border);
+      background: #080c14;
+      font-size: 10px;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer a { color: #64748b; text-decoration: none; font-weight: 500; }
+    .footer a:hover { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-brand">
+      <div class="brand-icon">🛡️</div>
+      <div>
+        <div class="brand-title">Phish<span>Align</span></div>
+        <div class="brand-tag">Cross-Modal AI Guard</div>
+      </div>
+    </div>
+    <div class="status-pill pending" id="status-pill">Scanning</div>
+  </div>
+
+  <!-- Body Content -->
+  <div class="content">
+
+    <!-- 1. PENDING SCANNING -->
+    <div class="state" id="state-pending">
+      <div class="scanning-wrap">
+        <div class="pulse-radar">
+          <div class="radar-ring"></div>
+          <div class="radar-center"></div>
+        </div>
+        <div class="scan-title">Analyzing Page Intelligence</div>
+        <div class="scan-sub">Inspecting URL lexical tokens, HTML DOM structure, and visual appearance...</div>
+      </div>
+    </div>
+
+    <!-- 2. ANALYZED VERDICT (Handles Legitimate, Suspicious, Phishing) -->
+    <div class="state" id="state-analyzed">
+      
+      <!-- Verdict Card -->
+      <div class="verdict-card legitimate" id="verdict-card">
+        <div class="verdict-header">
+          <span class="verdict-icon" id="verdict-icon">✅</span>
+          <span class="verdict-title" id="verdict-title">Authentic Website</span>
+        </div>
+        <div class="verdict-desc" id="verdict-desc">
+          No brand impersonation or credential-harvesting mechanisms detected.
+        </div>
+
+        <!-- Dynamic Brand Spoof Alert -->
+        <div class="spoof-alert" id="spoof-alert">
+          <span>⚠️</span>
+          <span id="spoof-alert-text">Target brand impersonation detected.</span>
+        </div>
+      </div>
+
+      <!-- Risk Meter -->
+      <div class="meter-section">
+        <div class="meter-header">
+          <span class="meter-label">Phishing Risk Probability</span>
+          <span class="meter-score safe" id="meter-score">0.0%</span>
+        </div>
+        <div class="meter-track">
+          <div class="meter-fill safe" id="meter-fill"></div>
+        </div>
+        <div class="meter-ticks">
+          <span>0% Safe</span>
+          <span>50% Caution</span>
+          <span>78% Danger</span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <!-- Modalities Breakdown -->
+      <div class="modalities-grid">
+        <div class="mod-card">
+          <div class="mod-title">URL Model</div>
+          <div class="mod-val" id="mod-url">—</div>
+        </div>
+        <div class="mod-card">
+          <div class="mod-title">HTML DOM</div>
+          <div class="mod-val" id="mod-html">—</div>
+        </div>
+        <div class="mod-card">
+          <div class="mod-title">Computer Vision</div>
+          <div class="mod-val" id="mod-visual">—</div>
+        </div>
+      </div>
+
+      <!-- Intent & Security Signals -->
+      <div class="signals-box" id="signals-box">
+        <div class="signals-title">Security Signals & Page Intent</div>
+        <div class="signals-list" id="signals-list">
+          <span class="signal-chip safe">Domain Aligned</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions" id="actions-container">
+        <!-- Injected dynamically based on risk tier -->
+      </div>
+
+      <div class="url-strip" id="url-strip"></div>
+    </div>
+
+    <!-- 3. ERROR STATE -->
+    <div class="state" id="state-error">
+      <div class="error-wrap">
+        <div class="error-icon" id="err-icon">🔌</div>
+        <div class="error-title" id="err-title">Backend Disconnected</div>
+        <div class="error-msg" id="err-msg">
+          Could not communicate with the PhishAlign API at http://127.0.0.1:8000.
+        </div>
+        <div class="actions">
+          <button class="btn btn-warn" id="btn-err-retry">🔄 Retry Connection</button>
+          <button class="btn btn-ghost" id="btn-err-ignore">Continue Unprotected</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. NONE (Default empty) -->
+    <div class="state" id="state-none">
+      <div class="scanning-wrap">
+        <div style="font-size: 28px; margin-bottom: 8px;">🌐</div>
+        <div class="scan-title">Ready to Inspect</div>
+        <div class="scan-sub">Navigate to any web page to initiate automated phishing detection.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>PhishAlign v2.0 · 3-Tier AI</span>
+    <a href="http://127.0.0.1:8000/docs" target="_blank">API Docs ↗</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

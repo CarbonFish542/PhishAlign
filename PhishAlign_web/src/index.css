@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-navy-950: #070b14;
+  --color-navy-900: #0b1220;
+  --color-navy-850: #0f1728;
+  --color-navy-800: #131c2e;
+  --color-navy-700: #182338;
+  --color-navy-600: #223049;
+  --color-line: #2a3a55;
+  --color-ink: #f4f7fc;
+  --color-muted: #b4c0d4;
+  --color-cyan: #4aa8e8;
+  --color-safe: #2fbf71;
+  --color-risk: #e5484d;
+  --color-warn: #e8a838;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 500px at 12% -10%, rgba(74, 168, 232, 0.08), transparent 55%),
+    radial-gradient(900px 420px at 90% 0%, rgba(47, 191, 113, 0.05), transparent 50%),
+    #0b1220;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(74, 168, 232, 0.28);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.45s ease-out both;
+}
+
+.stagger-1 {
+  animation-delay: 0.05s;
+}
+.stagger-2 {
+  animation-delay: 0.1s;
+}
+.stagger-3 {
+  animation-delay: 0.15s;
+}
+.stagger-4 {
+  animation-delay: 0.2s;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(28, 40, 64, 0.98), rgba(18, 28, 46, 0.98));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+}
+
+.line-draw {
+  stroke-dasharray: 8 6;
+  animation: dash-flow 1.6s linear infinite;
+}

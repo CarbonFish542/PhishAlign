@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign in - Google Accounts - Action Required</title>
+  <style>
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .demo-banner {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 28px;
+      width: 420px;
+      box-sizing: border-box;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .google-logo {
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+    .g-blue { color: #4285f4; }
+    .g-red { color: #ea4335; }
+    .g-yellow { color: #fbbc05; }
+    .g-green { color: #34a853; }
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      color: #1f1f1f;
+      margin: 0 0 8px 0;
+    }
+    .subtext {
+      font-size: 14px;
+      color: #444746;
+      margin-bottom: 30px;
+    }
+    .input-box {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #747775;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    .input-box:focus {
+      border: 2px solid #0b57d0;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    .btn {
+      background: #0b57d0;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #0842a0;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    ⚠️ Simulated Phishing Testbed — Google Account Impersonation
+  </div>
+
+  <div class="card">
+    <div class="google-logo">
+      <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+    </div>
+
+    <h1>Sign in</h1>
+    <div class="subtext">Use your Google Account to confirm identity</div>
+
+    <form action="javascript:void(0);" onsubmit="event.preventDefault(); alert('PhishAlign Test: Form submission blocked (inert demo).');">
+      <input type="text" class="input-box" placeholder="Email or phone" required />
+      <input type="password" class="input-box" placeholder="Enter your password" required />
+      <div class="btn-container">
+        <button type="submit" class="btn">Next</button>
+      </div>
+    </form>
+    <div style="margin-top: 35px; border-top: 1px solid #eee; padding-top: 15px; font-size: 13px;">
+      <strong>Switch Test Scenarios:</strong><br/>
+      <a href="/" style="color: #0070ba; text-decoration: none; margin-right: 12px;">PayPal Spoof</a> |
+      <a href="/microsoft.html" style="color: #0067b8; text-decoration: none; margin-left: 12px;">Microsoft Spoof</a>
+    </div>
+  </div>
+</body>
+</html>
